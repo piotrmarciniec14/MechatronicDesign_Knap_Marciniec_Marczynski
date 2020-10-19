@@ -1,10 +1,1 @@
-echo "# MechatronicDesign_Knap_Marciniec_Marczynski" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/piotrmarciniec14/MechatronicDesign_Knap_Marciniec_Marczynski.git
-git push -u origin main
-
-
-Wprowadzam losowe zmiany zeby zobaczyc jak to dziala 
+lab1
