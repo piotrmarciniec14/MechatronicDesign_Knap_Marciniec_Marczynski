@@ -1,30 +1,24 @@
 //lab1
-#include <Servo.h>
-
-int pos = 0;
-
-Servo servo_9;
+int buttonState = 0;
 
 void setup()
 {
-  servo_9.attach(9);
-
+  pinMode(2, INPUT);
+  pinMode(13, OUTPUT);
 }
 
 void loop()
 {
-  // sweep the servo from 0 to 180 degrees in steps
-  // of 1 degrees
-  for (pos = 0; pos <= 180; pos += 1) {
-    // tell servo to go to position in variable 'pos'
-    servo_9.write(pos);
-    // wait 15 ms for servo to reach the position
-    delay(15); // Wait for 15 millisecond(s)
+  // read the state of the pushbutton value
+  buttonState = digitalRead(2);
+  // check if pushbutton is pressed.  if it is, the
+  // buttonState is HIGH
+  if (buttonState == HIGH) {
+    // turn LED on
+    digitalWrite(13, HIGH);
+  } else {
+    // turn LED off
+    digitalWrite(13, LOW);
   }
-  for (pos = 180; pos >= 0; pos -= 1) {
-    // tell servo to go to position in variable 'pos'
-    servo_9.write(pos);
-    // wait 15 ms for servo to reach the position
-    delay(15); // Wait for 15 millisecond(s)
-  }
+  delay(10); // Delay a little bit to improve simulation performance
 }
