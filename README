@@ -1,2 +1,90 @@
-//lab1
+/*
+Knap Paweł
+Marciniec Piotr
+Marczyński Bartosz
 
+Zadanie 1 
+Wcisniecie przycisku SW1 powoduje wydanie zezwolenia na obrot serwa,
+zaswiecenie diody oraz wypisanie komunikaty w monitorze portu szeregowego.
+Kolejne wcisniecie tego przycisku zdejmie zezewolenie na start, zgasi diode oraz
+ponownie wypisze komunikat w monitorze portu szeregowego.
+
+Wcisniecie przyciskow SW2 oraz SW3 powoduje obrot serwa, pod warunkiem, ze 
+zostalo wydane pozwolenie na start oraz jest wcisniety tylko jeden z tych przyciskow.
+*/
+
+#include <Servo.h>
+
+int pos = 0;
+int posAktualna = 0;
+int buttonStateSW1 = 0;
+int buttonStateSW2 = 0;
+int buttonStateSW3 = 0;
+
+int lbWcisniec;
+
+int zezwolenieNaStart = 0;
+
+Servo servo_9;
+
+void setup()
+{
+  
+  Serial.begin(9600); //Ustawienie prędkości transmisji
+  servo_9.attach(9);
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(13, OUTPUT);
+
+}
+
+void loop()
+{
+  // read the state of the pushbutton value
+  
+  buttonStateSW1 = digitalRead(2);
+  buttonStateSW2 = digitalRead(3);
+  buttonStateSW3 = digitalRead(4);
+  
+  // check if pushbutton is pressed.  if it is, the
+  // buttonState is HIGH
+  if (buttonStateSW1 == HIGH) { 
+  	//zmiana stanu zmiennej zezewolnie
+    //na start po wcisnieciu przycisku SW1
+    lbWcisniec++;
+    zezwolenieNaStart = !zezwolenieNaStart;
+    Serial.println("Lb wcisniec przycisku: ");
+    Serial.println(lbWcisniec);
+    delay(200);    
+  }
+  
+  
+  if (zezwolenieNaStart) {
+    digitalWrite(13,HIGH);
+  } else {
+    digitalWrite(13,LOW);
+  }
+  
+  if (buttonStateSW2 == HIGH && buttonStateSW3 == LOW
+     	&& zezwolenieNaStart) { 
+  	  for (pos = posAktualna; pos <= 180; pos += 1) {
+      // tell servo to go to position in variable 'pos'
+      servo_9.write(pos);
+      posAktualna = pos;
+      // wait 15 ms for servo to reach the position
+      delay(15); // Wait for 15 millisecond(s)  
+     }
+  }
+    
+  if (buttonStateSW3 == HIGH && buttonStateSW2 == LOW 
+     	&& zezwolenieNaStart) { 
+      for (pos = posAktualna; pos >= 0; pos -= 1) {
+      // tell servo to go to position in variable 'pos'
+      servo_9.write(pos);
+      posAktualna = pos;
+      // wait 15 ms for servo to reach the position
+      delay(15); // Wait for 15 millisecond(s)
+    }
+  }
+}
