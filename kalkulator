@@ -1,0 +1,91 @@
+float liczba1;
+float liczba2;
+int wybor;
+String odebraneDane1 = "";
+String odebraneDane2 = "";
+String odebraneDane3 = "";
+
+void setup()
+{
+    
+  Serial.begin(9600); //Ustawienie prędkości transmisji
+  Serial.println("Witamy w naszym kalkulatorze!"); 
+  
+}
+
+void loop()
+{
+  Serial.println("Wpisz liczbe pierwsza: ");
+  
+  while(!Serial.available() )
+  {}
+
+  	if(Serial.available() > 0) 
+  
+  	{ //Czy Arduino odebrano dane
+   	odebraneDane1 = Serial.readStringUntil('\n'); //Jeśli tak, to odczytaj je do znaku końca linii
+    liczba1 = odebraneDane1.toInt();
+  	Serial.println(liczba1);
+  }
+  
+  Serial.println("Wpisz liczbe druga: ");
+  
+  while(!Serial.available() )
+  {}
+
+  	if(Serial.available() > 0) 
+  
+  	{ 
+   	odebraneDane2 = Serial.readStringUntil('\n'); 
+    liczba2 = odebraneDane2.toInt();
+  	Serial.println(liczba2);
+  }
+  
+  Serial.println("Dodawanie - wybierz 1 ");
+  Serial.println("Odejmowanie - wybierz 2: ");
+  Serial.println("Mnozenie - wybierz 3: ");
+  Serial.println("Dzielenie - wybierz 4: ");
+  
+  while(!Serial.available() )
+  {}
+
+  	if(Serial.available() > 0) 
+  
+  	{ 
+   	odebraneDane3 = Serial.readStringUntil('\n'); 
+    wybor = odebraneDane3.toInt();
+  	}
+  
+  switch(wybor){
+    
+    case 1:
+    Serial.println("Wynik dodawania to: ");
+    Serial.println(liczba1+liczba2);
+    Serial.println();
+      break;
+                 
+  	case 2:
+    Serial.println("Wynik odejmowania to: ");
+    Serial.println(liczba1-liczba2);
+    Serial.println();
+      break;
+                   
+    case 3:
+    Serial.println("Wynik mnozenia to: ");
+    Serial.println(liczba1*liczba2);
+    Serial.println();
+      break;
+                   
+    case 4:
+    if(liczba2 == 0)
+    {Serial.println("NIE DZIELIMY PRZEZ ZERO!");}
+    else
+    {
+    Serial.println("Wynik dzielenia to: ");
+    Serial.println(liczba1/liczba2);
+    }
+    Serial.println();
+      break;     
+                  
+  }
+}
