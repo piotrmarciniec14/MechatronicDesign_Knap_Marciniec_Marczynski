@@ -1,0 +1,44 @@
+#include <PID_v1.h>
+#define DALMIERZ_Wyjscie 9
+#define DALMIERZ_Wejscie 8					
+#define Prawo 7						
+#define Lewo 8
+#define motorPin 3 						
+int speed=255;
+int odleglosc=0;
+double Setpoint, Input, Output;
+double Kp=2, Ki=5, Kd=1;
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+void setup(){
+pinMode(DALMIERZ_Wyjscie,OUTPUT);
+pinMode(DALMIERZ_Wejscie,INPUT);
+pinMode(motorPin, OUTPUT);
+pinMode(7, OUTPUT);
+pinMode(8, OUTPUT);
+Setpoint=9; 							
+Input = odleglosc;
+myPID.SetMode(AUTOMATIC);
+}
+void loop(){							//Sprawdzanie odleglosci
+digitalWrite(DALMIERZ_Wyjscie, LOW);
+delayMicroseconds(2);
+digitalWrite(DALMIERZ_Wyjscie, HIGH);
+delayMicroseconds(8);
+digitalWrite(DALMIERZ_Wyjscie, LOW);
+odleglosc=pulseIn(DALMIERZ_Wejscie, HIGH)/58;			// 58 ms to czas w jakim dzwiek pokonuje 1cm
+Input = odleglosc;
+myPID.Compute();
+speed = Output;							//Kontrola pracy silnika
+if(odleglosc<10){
+digitalWrite(Prawo, LOW); 					//obroty silnika w lewo
+digitalWrite(Lewo, HIGH);
+analogWrite(motorPin, speed);
+delay(100);
+}else
+{
+digitalWrite(Prawo, HIGH); 					//obroty silnika w prawo
+digitalWrite(Lewo, LOW);
+analogWrite(motorPin, speed);
+delay(100);
+}
+}
